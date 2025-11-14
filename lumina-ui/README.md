@@ -14,6 +14,28 @@ Modern, professional web dashboard for Lumina AI meeting intelligence platform b
 - ✅ **Responsive Design** - Mobile, tablet, and desktop support
 - ✅ **Type-Safe API** - Full TypeScript integration with FastAPI backend
 
+## 📸 Screenshots
+
+### Dashboard
+![Dashboard](assets/dashboard.png)
+*Live meeting status, upcoming meetings, and recent recordings overview*
+
+### Recordings
+![Recordings](assets/recordings.png)
+*Browse and play meeting recordings with built-in audio player*
+
+### Transcripts
+![Transcripts](assets/transcripts.png)
+*Search and view meeting transcripts with timestamps*
+
+### Meeting Minutes
+![Minutes](assets/minutes.png)
+*AI-generated meeting summaries with action items and key decisions*
+
+### Settings
+![Settings](assets/settings.png)
+*No-code configuration panel for Calendar, AI Models, Email, and Recording settings*
+
 ## 🚀 Quick Start
 
 ### Prerequisites
@@ -53,27 +75,34 @@ lumina-ui/
 │   ├── page.tsx                 # Home page (redirects to dashboard)
 │   ├── providers.tsx            # React Query & Theme providers
 │   ├── globals.css              # Global styles with Tailwind
-│   └── dashboard/
-│       └── page.tsx             # Main dashboard page
+│   ├── dashboard/               # Dashboard page
+│   ├── recordings/              # Recordings page with audio player
+│   ├── transcripts/             # Transcripts search and viewer
+│   ├── minutes/                 # Meeting minutes with AI summaries
+│   ├── meetings/                # Calendar view and manual join
+│   ├── settings/                # Configuration panel
+│   └── analytics/               # Analytics and statistics
 │
 ├── components/                   # React components
 │   ├── ui/                      # Shadcn UI components
-│   ├── dashboard/               # Dashboard-specific components
-│   ├── meetings/                # Meeting-related components
-│   └── settings/                # Settings/config components
+│   └── layout/                  # Layout components
+│       ├── sidebar.tsx          # Navigation sidebar
+│       ├── header.tsx           # Top header with theme toggle
+│       └── dashboard-layout.tsx # Main layout wrapper
 │
 ├── lib/                         # Utilities and libraries
 │   ├── api-client.ts            # Axios client for FastAPI
-│   ├── utils.ts                 # Helper functions (cn, formatters)
-│   └── auth.ts                  # Authentication utilities (TBD)
-│
-├── hooks/                       # Custom React hooks
-│   ├── use-meetings.ts          # Meeting data hooks (TBD)
-│   ├── use-recordings.ts        # Recording data hooks (TBD)
-│   └── use-config.ts            # Config data hooks (TBD)
+│   └── utils.ts                 # Helper functions (cn, formatters)
 │
 ├── types/                       # TypeScript type definitions
 │   └── index.ts                 # All API types and interfaces
+│
+├── assets/                      # Screenshots and images
+│   ├── dashboard.png            # Dashboard screenshot
+│   ├── recordings.png           # Recordings page screenshot
+│   ├── transcripts.png          # Transcripts page screenshot
+│   ├── minutes.png              # Minutes page screenshot
+│   └── settings.png             # Settings page screenshot
 │
 ├── public/                      # Static assets
 │
@@ -192,36 +221,49 @@ The following Shadcn components are configured and ready to use:
 
 ## 📝 Development Guide
 
-### Pages to Implement
+### Implemented Pages
 
-Based on the todo list, here are the remaining pages to build:
+All core pages are fully implemented and functional:
 
-1. **Recordings Page** (`app/recordings/page.tsx`)
-   - List view with audio player
-   - Delete functionality
+1. **Dashboard** (`app/dashboard/page.tsx`)
+   - Live meeting status cards
+   - Upcoming meetings from Google Calendar
+   - Recent recordings preview
+
+2. **Recordings** (`app/recordings/page.tsx`)
+   - Interactive table with all recordings
+   - Built-in audio player
+   - Download and delete functionality
    - File size and duration display
 
-2. **Transcripts Page** (`app/transcripts/page.tsx`)
+3. **Transcripts** (`app/transcripts/page.tsx`)
    - Search and filter transcripts
+   - Two-panel layout (list + viewer)
    - Word count and timestamp display
    - Export functionality
 
-3. **Minutes Page** (`app/minutes/page.tsx`)
+4. **Minutes** (`app/minutes/page.tsx`)
    - Markdown viewer for meeting minutes
-   - Action items list
+   - Action items extraction and display
    - Download as MD/JSON
+   - Attendee and meeting metadata
 
-4. **Settings Page** (`app/settings/page.tsx`)
-   - No-code configuration panel
-   - Calendar settings (auto-join toggle)
-   - AI model selection
-   - Email configuration
+5. **Meetings** (`app/meetings/page.tsx`)
+   - Calendar monitoring controls
+   - Manual join meeting dialog
+   - Upcoming meetings list
+   - Auto-record toggle
+
+6. **Settings** (`app/settings/page.tsx`)
+   - Tabbed configuration panel
+   - Calendar settings (auto-join, timing)
+   - AI model selection (LLM + Whisper)
+   - Email configuration (SMTP)
    - Recording quality settings
 
-5. **Analytics Page** (`app/analytics/page.tsx`)
-   - Charts for meetings over time
-   - Duration statistics
-   - Usage metrics
+7. **Analytics** (`app/analytics/page.tsx`)
+   - Metrics dashboard (total meetings, duration, participants)
+   - Ready for charts integration
 
 ### Custom Hooks Pattern
 
@@ -275,33 +317,37 @@ export const useAppStore = create<AppState>((set) => ({
 }))
 ```
 
-## 🎯 Next Steps
+## 🎯 Completed Features
 
-### Phase 1: Core Pages (Week 1-2)
-- [ ] Complete recordings page with audio player
-- [ ] Build transcripts viewer with search
-- [ ] Create meeting minutes display
-- [ ] Add navigation sidebar
+### ✅ Core Pages (Completed)
+- ✅ Recordings page with audio player
+- ✅ Transcripts viewer with search
+- ✅ Meeting minutes display
+- ✅ Navigation sidebar with routing
 
-### Phase 2: Configuration (Week 3)
-- [ ] Build no-code settings panel
-- [ ] Implement calendar settings
-- [ ] Add AI model configuration
-- [ ] Create email settings form
+### ✅ Configuration (Completed)
+- ✅ No-code settings panel with tabs
+- ✅ Calendar settings (auto-join, timing)
+- ✅ AI model configuration (LLM + Whisper)
+- ✅ Email settings (SMTP)
+- ✅ Recording quality settings
 
-### Phase 3: Advanced Features (Week 4)
+### ✅ Dashboard & UI (Completed)
+- ✅ Dashboard with live stats
+- ✅ Manual meeting join interface
+- ✅ Dark/light theme with toggle
+- ✅ Responsive design (mobile, tablet, desktop)
+- ✅ Toast notifications
+- ✅ Type-safe API client
+
+### 🚧 Future Enhancements (Optional)
 - [ ] WebSocket integration for real-time updates
-- [ ] Analytics dashboard with charts
-- [ ] Manual meeting join interface
-- [ ] Authentication system
-
-### Phase 4: Polish (Week 5-6)
-- [ ] Dark/light theme refinement
-- [ ] Mobile responsiveness
-- [ ] Accessibility improvements
-- [ ] Loading states and skeletons
-- [ ] Error handling and toasts
-- [ ] User documentation
+- [ ] Advanced analytics with charts (Recharts)
+- [ ] Authentication system (JWT)
+- [ ] Loading skeleton components
+- [ ] Error boundary components
+- [ ] Advanced accessibility (keyboard navigation)
+- [ ] Page transitions and animations
 
 ## 🔐 Authentication
 
