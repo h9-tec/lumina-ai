@@ -26,6 +26,8 @@ Lumina is a sophisticated meeting intelligence platform that autonomously monito
 - **Anti-Bot Detection**: Advanced human behavior simulation prevents Google Meet bot detection
 - **Local-First Storage**: Optional local storage with Whisper transcription—no cloud dependency required
 - **Meeting Minutes Automation**: Complete pipeline from audio capture to formatted minutes with email delivery
+- **Developer CLI**: Comprehensive command-line interface for all operations
+- **Modular API Architecture**: Clean, maintainable codebase with separated endpoint modules
 
 ---
 
@@ -46,6 +48,8 @@ Lumina is a sophisticated meeting intelligence platform that autonomously monito
 | **🌐 REST API** | Full-featured FastAPI server for programmatic control |
 | **🧠 Local LLM Support** | Ollama, LLaMA.cpp integration with Azure fallback |
 | **🛡️ Bot Detection Avoidance** | Randomized human-like interactions (mouse movements, clicks) |
+| **📟 Developer CLI** | Command-line interface for recordings, transcripts, minutes |
+| **🗂️ Modular Architecture** | Clean endpoint separation for maintainability |
 
 ### Meeting Minutes Pipeline
 
@@ -98,7 +102,14 @@ Lumina is a sophisticated meeting intelligence platform that autonomously monito
 lumina-ai/
 ├── src/
 │   ├── core/                    # Core application modules
-│   │   ├── lumina.py            # FastAPI server with calendar monitoring
+│   │   ├── api/                 # Modular API endpoints
+│   │   │   ├── __init__.py      # Router exports
+│   │   │   ├── meetings.py      # Meeting & calendar endpoints
+│   │   │   ├── recordings.py    # Recording management
+│   │   │   ├── transcripts.py   # Transcription operations
+│   │   │   ├── minutes.py       # Minutes generation & processing
+│   │   │   └── config.py        # Configuration & status
+│   │   ├── lumina.py            # FastAPI server (refactored, modular)
 │   │   ├── calendar_service.py  # Google Calendar API integration
 │   │   └── chrome_manager.py    # Selenium Chrome automation
 │   ├── recording/               # Audio/Video recording
@@ -125,12 +136,11 @@ lumina-ai/
 ├── storage/                     # Transcripts and minutes
 │   ├── transcripts/
 │   └── minutes/
-├── lumina.py                    # Main entry point
+├── lumina.py                    # Main entry point (FastAPI server)
+├── lumina_cli.py                # Developer CLI tool
 ├── requirements.txt
 ├── .env.example
-├── README.md
-├── SETUP_GUIDE.md
-└── CLAUDE.md
+└── README.md
 ```
 
 #### Core Modules (`src/core/`)
@@ -504,18 +514,136 @@ curl -X POST http://localhost:8000/calendar/start-monitor/
 curl -X POST http://localhost:8000/calendar/stop-monitor/
 ```
 
-### Mode 3: Standalone Scripts
+### Mode 3: Developer CLI
+
+**The Developer CLI provides a comprehensive command-line interface for all operations:**
+
+**View all commands:**
+
+```bash
+python lumina_cli.py --help
+```
+
+**Start server:**
+
+```bash
+# Start FastAPI server
+python lumina_cli.py server
+
+# Start with auto-reload (development)
+python lumina_cli.py server --reload --port 8080
+```
+
+**Manage recordings:**
+
+```bash
+# List all recordings
+python lumina_cli.py recordings list
+
+# Get recording info
+python lumina_cli.py recordings info 20251114_194510
+
+# Delete a recording
+python lumina_cli.py recordings delete 20251114_194510
+```
+
+**Transcription:**
+
+```bash
+# Transcribe a recording
+python lumina_cli.py transcribe start 20251114_194510
+
+# Use specific Whisper model
+python lumina_cli.py transcribe start 20251114_194510 --model medium
+
+# List all transcripts
+python lumina_cli.py transcribe list
+
+# View transcript content
+python lumina_cli.py transcribe show 20251114_194510
+```
+
+**Meeting minutes:**
+
+```bash
+# Generate minutes from transcript
+python lumina_cli.py minutes generate 20251114_194510
+
+# Use specific LLM provider
+python lumina_cli.py minutes generate 20251114_194510 \
+  --provider ollama --model mistral
+
+# List all minutes
+python lumina_cli.py minutes list
+
+# View minutes
+python lumina_cli.py minutes show 20251114_194510
+
+# Email minutes to recipients
+python lumina_cli.py minutes email 20251114_194510 \
+  team@company.com manager@company.com \
+  --subject "Team Meeting Minutes"
+```
+
+**Complete pipeline:**
+
+```bash
+# Process recording: Transcribe → Generate Minutes → Send Email
+python lumina_cli.py process 20251114_194510
+
+# Skip specific steps
+python lumina_cli.py process 20251114_194510 --skip-email
+python lumina_cli.py process 20251114_194510 --skip-transcribe
+
+# Use specific LLM
+python lumina_cli.py process 20251114_194510 \
+  --provider ollama --model llama3
+```
+
+**Configuration:**
+
+```bash
+# View current configuration
+python lumina_cli.py config
+```
+
+**Output example:**
+
+```
+⚙️  Lumina Configuration:
+
+🧠 LLM:
+  Provider: ollama
+  Model: llama3
+
+🎙️  Whisper:
+  Model: base
+
+📧 Email:
+  Configured: ✅
+  Server: smtp.gmail.com
+  User: your-email@gmail.com
+
+🗓️  Calendar:
+  Auto-start: true
+
+🌐 Chrome:
+  Profile: Default
+```
+
+### Mode 4: Standalone Scripts
 
 **Quick join (no API server):**
 
 ```bash
-python join_meeting_auto.py "https://meet.google.com/xxx-xxxx-xxx" "Bot Name"
+python src/automation/join_meeting_auto.py \
+  "https://meet.google.com/xxx-xxxx-xxx" "Bot Name"
 ```
 
 **Process existing recording:**
 
 ```bash
-python process_recording.py recordings/meeting.wav \
+python scripts/process_recording.py recordings/meeting.wav \
   --title "Q4 Planning Meeting" \
   --email "team@company.com,manager@company.com" \
   --llm-provider ollama \
@@ -530,7 +658,7 @@ python process_recording.py recordings/meeting.wav \
 - `--no-email`: Skip email delivery
 - `--no-save`: Skip file saving
 
-### Mode 4: Local Meeting Minutes Pipeline
+### Mode 5: Local Meeting Minutes Pipeline
 
 **Process recording end-to-end:**
 
@@ -685,6 +813,267 @@ Get system status.
   "active_meetings": 1,
   "uptime": "2h 34m",
   "version": "2.0.0"
+}
+```
+
+#### Recording Management
+
+**GET /api/recordings/**
+
+List all available audio recordings.
+
+**Response:**
+```json
+{
+  "recordings": [
+    {
+      "meeting_id": "20251114_194510",
+      "file_path": "recordings/20251114_194510.wav",
+      "size_mb": 45.2,
+      "duration_seconds": 3600,
+      "created_at": "2025-11-14T19:45:10Z"
+    }
+  ],
+  "total": 5
+}
+```
+
+**GET /api/recordings/{meeting_id}**
+
+Get detailed information about a specific recording.
+
+**Response:**
+```json
+{
+  "meeting_id": "20251114_194510",
+  "file_path": "recordings/20251114_194510.wav",
+  "size_mb": 45.2,
+  "duration_seconds": 3600,
+  "created_at": "2025-11-14T19:45:10Z",
+  "format": "wav",
+  "sample_rate": 16000,
+  "channels": 1
+}
+```
+
+**DELETE /api/recordings/{meeting_id}**
+
+Delete a specific recording.
+
+**Response:**
+```json
+{
+  "status": "success",
+  "message": "Recording deleted successfully",
+  "meeting_id": "20251114_194510"
+}
+```
+
+#### Transcription Operations
+
+**POST /api/transcripts/transcribe/{meeting_id}**
+
+Transcribe a recording using local Whisper.
+
+**Query Parameters:**
+- `model`: Whisper model size (default: "base") - Options: tiny, base, small, medium, large
+
+**Response:**
+```json
+{
+  "status": "processing",
+  "message": "Transcription started in background",
+  "meeting_id": "20251114_194510",
+  "model": "base"
+}
+```
+
+**GET /api/transcripts/**
+
+List all available transcripts.
+
+**Response:**
+```json
+{
+  "transcripts": [
+    {
+      "meeting_id": "20251114_194510",
+      "file_path": "storage/transcripts/20251114_194510.txt",
+      "word_count": 5420,
+      "created_at": "2025-11-14T20:15:30Z"
+    }
+  ],
+  "total": 3
+}
+```
+
+**GET /api/transcripts/{meeting_id}**
+
+Get the full transcript for a specific meeting.
+
+**Response:**
+```json
+{
+  "meeting_id": "20251114_194510",
+  "transcript": "Welcome everyone to today's meeting...",
+  "word_count": 5420,
+  "created_at": "2025-11-14T20:15:30Z"
+}
+```
+
+#### Meeting Minutes
+
+**POST /api/minutes/generate/{meeting_id}**
+
+Generate meeting minutes from a transcript using local LLM.
+
+**Query Parameters:**
+- `provider`: LLM provider (default: "ollama") - Options: ollama, llamacpp, azure
+- `model`: Model name (default: "llama3")
+
+**Response:**
+```json
+{
+  "status": "processing",
+  "message": "Minutes generation started in background",
+  "meeting_id": "20251114_194510",
+  "provider": "ollama",
+  "model": "llama3"
+}
+```
+
+**GET /api/minutes/**
+
+List all available meeting minutes.
+
+**Response:**
+```json
+{
+  "minutes": [
+    {
+      "meeting_id": "20251114_194510",
+      "meeting_title": "Q4 Planning Session",
+      "meeting_date": "2025-11-14",
+      "md_file": "storage/minutes/20251114_194510.md",
+      "json_file": "storage/minutes/20251114_194510.json",
+      "created_at": "2025-11-14T20:30:45Z"
+    }
+  ],
+  "total": 2
+}
+```
+
+**GET /api/minutes/{meeting_id}**
+
+Get meeting minutes in markdown or JSON format.
+
+**Query Parameters:**
+- `format`: Output format (default: "markdown") - Options: markdown, json
+
+**Response (markdown):**
+```json
+{
+  "meeting_id": "20251114_194510",
+  "format": "markdown",
+  "content": "# Meeting Minutes\n\n## Meeting Information\n..."
+}
+```
+
+**Response (json):**
+```json
+{
+  "meeting_id": "20251114_194510",
+  "format": "json",
+  "content": {
+    "meeting_title": "Q4 Planning Session",
+    "meeting_date": "2025-11-14",
+    "attendees": ["Alice", "Bob", "Charlie"],
+    "key_points": [...],
+    "action_items": [...],
+    "decisions": [...]
+  }
+}
+```
+
+**POST /api/minutes/email/{meeting_id}**
+
+Send meeting minutes via email.
+
+**Request:**
+```json
+{
+  "recipients": ["team@company.com", "manager@company.com"],
+  "subject": "Meeting Minutes: Q4 Planning",
+  "include_attachment": true
+}
+```
+
+**Response:**
+```json
+{
+  "status": "success",
+  "message": "Meeting minutes sent successfully",
+  "recipients": ["team@company.com", "manager@company.com"],
+  "meeting_id": "20251114_194510"
+}
+```
+
+**POST /api/minutes/process/{meeting_id}**
+
+Complete processing pipeline: Transcribe → Generate Minutes → Send Email.
+
+**Query Parameters:**
+- `skip_transcribe`: Skip transcription if already done (default: false)
+- `skip_minutes`: Skip minutes generation (default: false)
+- `skip_email`: Skip email sending (default: false)
+- `provider`: LLM provider (default: "ollama")
+- `model`: LLM model (default: "llama3")
+- `recipients`: Comma-separated email addresses
+
+**Response:**
+```json
+{
+  "status": "processing",
+  "message": "Complete pipeline started in background",
+  "meeting_id": "20251114_194510",
+  "steps": ["transcribe", "generate_minutes", "send_email"]
+}
+```
+
+#### Configuration
+
+**GET /api/config/**
+
+Get current system configuration.
+
+**Response:**
+```json
+{
+  "version": "2.0.0",
+  "llm": {
+    "provider": "ollama",
+    "model": "llama3",
+    "available_providers": ["ollama", "llamacpp", "azure"]
+  },
+  "whisper": {
+    "model": "base",
+    "available_models": ["tiny", "base", "small", "medium", "large"]
+  },
+  "storage": {
+    "recordings_dir": "recordings/",
+    "transcripts_dir": "storage/transcripts/",
+    "minutes_dir": "storage/minutes/"
+  },
+  "email": {
+    "configured": true,
+    "smtp_server": "smtp.gmail.com",
+    "smtp_port": 587
+  },
+  "calendar": {
+    "enabled": true,
+    "monitor_active": true,
+    "check_interval_minutes": 1
+  }
 }
 ```
 
