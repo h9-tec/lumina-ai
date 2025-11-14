@@ -165,6 +165,10 @@ azure-credentials.json
 secrets.txt
 secrets.json
 
+# Chrome profile data (SENSITIVE!)
+lumina_chrome_profile/
+*chrome_profile*/
+
 # ============================================
 # MEETING DATA - RECORDINGS & OUTPUTS
 # ============================================
