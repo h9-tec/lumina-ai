@@ -200,12 +200,18 @@ temp_video/
 # SETUP_GUIDE.md
 # CLAUDE.md
 
-# Ignore temporary/generated markdown
+# Ignore temporary/generated markdown files
+CHANGES.md
+QUICK_START.md
+GOOGLE_SETUP_FIX.md
+TEST_STATUS.md
 *_temp.md
 *_draft.md
 *_backup.md
 notes.md
 scratch.md
+TODO.md
+NOTES.md
 
 # Setup directories
 setup/

@@ -6,10 +6,14 @@ import sys
 from pathlib import Path
 from datetime import datetime
 import whisper
-from local_llm_service import LocalLLMService
-from meeting_minutes_generator import MeetingMinutesGenerator
-from email_service import EmailService
-from local_storage_service import LocalStorageService
+
+# Add parent directory to path for imports
+sys.path.insert(0, str(Path(__file__).parent.parent))
+
+from src.intelligence.local_llm_service import LocalLLMService
+from src.intelligence.meeting_minutes_generator import MeetingMinutesGenerator
+from src.intelligence.email_service import EmailService
+from src.transcription.local_storage_service import LocalStorageService
 
 
 def process_meeting_recording(

@@ -92,42 +92,88 @@ Lumina is a sophisticated meeting intelligence platform that autonomously monito
 
 ### Component Overview
 
-#### Core Modules
+### Project Structure
 
-| Module | File | Description |
-|--------|------|-------------|
-| **Main Application** | `lumina.py` | FastAPI server with calendar monitoring and REST endpoints |
-| **Calendar Service** | `calendar_service.py` | Google Calendar API integration, OAuth 2.0 authentication |
-| **Chrome Manager** | `chrome_manager.py` | Selenium-based Chrome automation with profile persistence |
-| **Audio Recording** | `record_audio.py` | System audio capture using sounddevice (16kHz mono) |
-| **Video Recording** | `record_video.py` | Screen recording with OpenCV (optional) |
+```
+lumina-ai/
+├── src/
+│   ├── core/                    # Core application modules
+│   │   ├── lumina.py            # FastAPI server with calendar monitoring
+│   │   ├── calendar_service.py  # Google Calendar API integration
+│   │   └── chrome_manager.py    # Selenium Chrome automation
+│   ├── recording/               # Audio/Video recording
+│   │   ├── record_audio.py      # System audio capture
+│   │   ├── record_video.py      # Screen recording
+│   │   └── blob_storage_service.py  # Azure Blob Storage
+│   ├── transcription/           # Speech-to-text processing
+│   │   ├── speech_to_text.py    # Azure Speech Services
+│   │   ├── local_speech_to_text.py  # OpenAI Whisper
+│   │   └── local_storage_service.py  # Local file storage
+│   ├── intelligence/            # LLM and analysis
+│   │   ├── local_llm_service.py  # Unified LLM interface
+│   │   ├── meeting_minutes_generator.py  # Minutes generation
+│   │   └── email_service.py     # Email delivery
+│   └── automation/              # Meeting join automation
+│       ├── join_meeting_auto.py  # Auto-join with bot avoidance
+│       ├── join_meeting_standalone.py  # Chrome profile join
+│       ├── quick_join.py        # Minimal join script
+│       ├── join_current_meeting.py  # Current meeting detection
+│       └── join_google_meet.py  # Legacy login method
+├── scripts/
+│   └── process_recording.py     # Complete processing pipeline
+├── recordings/                  # Meeting audio files
+├── storage/                     # Transcripts and minutes
+│   ├── transcripts/
+│   └── minutes/
+├── lumina.py                    # Main entry point
+├── requirements.txt
+├── .env.example
+├── README.md
+├── SETUP_GUIDE.md
+└── CLAUDE.md
+```
 
-#### Processing Modules
+#### Core Modules (`src/core/`)
 
-| Module | File | Description |
-|--------|------|-------------|
-| **Speech-to-Text** | `speech_to_text.py` | Azure Speech Services integration |
-| **Local STT** | `local_speech_to_text.py` | OpenAI Whisper local transcription |
-| **Local LLM Service** | `local_llm_service.py` | Unified interface for Ollama, LLaMA.cpp, Azure GPT-4 |
-| **Minutes Generator** | `meeting_minutes_generator.py` | Structured meeting minutes creation |
-| **Email Service** | `email_service.py` | SMTP/Gmail API email delivery |
+| Module | Description |
+|--------|-------------|
+| **lumina.py** | FastAPI server with calendar monitoring, REST endpoints, and meeting session management |
+| **calendar_service.py** | Google Calendar API integration with OAuth 2.0 authentication |
+| **chrome_manager.py** | Selenium-based Chrome automation with profile persistence and bot detection avoidance |
 
-#### Storage Modules
+#### Recording Modules (`src/recording/`)
 
-| Module | File | Description |
-|--------|------|-------------|
-| **Blob Storage** | `blob_storage_service.py` | Azure Blob Storage with retry logic |
-| **Local Storage** | `local_storage_service.py` | File-based local storage implementation |
+| Module | Description |
+|--------|-------------|
+| **record_audio.py** | System audio capture using sounddevice (16kHz mono WAV) |
+| **record_video.py** | Screen recording with OpenCV (optional) |
+| **blob_storage_service.py** | Azure Blob Storage integration with retry logic |
 
-#### Utility Scripts
+#### Transcription Modules (`src/transcription/`)
 
-| Script | File | Description |
-|--------|------|-------------|
-| **Process Recording** | `process_recording.py` | End-to-end pipeline: Audio → Transcript → Minutes → Email |
-| **Auto Join** | `join_meeting_auto.py` | Automated meeting join with bot detection avoidance |
-| **Standalone Join** | `join_meeting_standalone.py` | Single meeting join using Chrome profile |
-| **Quick Join** | `quick_join.py` | Minimal meeting join script |
-| **Legacy Join** | `join_google_meet.py` | Original implementation (email/password login) |
+| Module | Description |
+|--------|-------------|
+| **speech_to_text.py** | Azure Speech Services integration for cloud transcription |
+| **local_speech_to_text.py** | OpenAI Whisper local transcription (privacy-first) |
+| **local_storage_service.py** | File-based local storage implementation |
+
+#### Intelligence Modules (`src/intelligence/`)
+
+| Module | Description |
+|--------|-------------|
+| **local_llm_service.py** | Unified interface for Ollama, LLaMA.cpp, Azure GPT-4 with automatic fallback |
+| **meeting_minutes_generator.py** | Structured meeting minutes creation with summary, key points, action items |
+| **email_service.py** | SMTP/Gmail API email delivery with HTML formatting and attachments |
+
+#### Automation Scripts (`src/automation/`)
+
+| Script | Description |
+|--------|-------------|
+| **join_meeting_auto.py** | Automated meeting join with human behavior simulation |
+| **join_meeting_standalone.py** | Single meeting join using existing Chrome profile |
+| **quick_join.py** | Minimal meeting join script for testing |
+| **join_current_meeting.py** | Detect and join currently running meeting |
+| **join_google_meet.py** | Legacy implementation with email/password login |
 
 ### Technology Stack
 
@@ -178,8 +224,8 @@ Lumina is a sophisticated meeting intelligence platform that autonomously monito
 
 ```bash
 # 1. Clone repository
-git clone https://github.com/M-Aboelgoud/Lumina.git
-cd Lumina
+git clone https://github.com/h9-tec/lumina-ai.git
+cd lumina-ai
 
 # 2. Create virtual environment
 python -m venv venv
@@ -198,7 +244,7 @@ cp .env.example .env
 # Place in project root
 
 # 6. Authenticate with Google Calendar
-python calendar_service.py
+python src/core/calendar_service.py
 
 # 7. Install Ollama (optional, for local LLM)
 curl -fsSL https://ollama.com/install.sh | sh
