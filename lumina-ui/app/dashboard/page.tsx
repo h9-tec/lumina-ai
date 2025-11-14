@@ -2,6 +2,7 @@
 
 import { useQuery } from "@tanstack/react-query"
 import apiClient from "@/lib/api-client"
+import { DashboardLayout } from "@/components/layout/dashboard-layout"
 
 export default function DashboardPage() {
   const { data: status, isLoading } = useQuery({
@@ -21,19 +22,21 @@ export default function DashboardPage() {
 
   if (isLoading) {
     return (
-      <div className="flex min-h-screen items-center justify-center">
-        <p>Loading...</p>
-      </div>
+      <DashboardLayout>
+        <div className="flex h-full items-center justify-center">
+          <p className="text-lg text-muted-foreground">Loading...</p>
+        </div>
+      </DashboardLayout>
     )
   }
 
   return (
-    <div className="min-h-screen bg-background p-8">
+    <DashboardLayout>
       <div className="mx-auto max-w-7xl">
         <div className="mb-8">
-          <h1 className="text-4xl font-bold">Lumina AI Dashboard</h1>
+          <h1 className="text-3xl font-bold">Welcome back</h1>
           <p className="mt-2 text-muted-foreground">
-            AI-powered meeting intelligence platform
+            Here's what's happening with your meetings today
           </p>
         </div>
 
@@ -117,6 +120,6 @@ export default function DashboardPage() {
           )}
         </div>
       </div>
-    </div>
+    </DashboardLayout>
   )
 }
