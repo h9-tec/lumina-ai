@@ -1600,11 +1600,11 @@ SOFTWARE.
 
 ## Contact
 
-**Project Maintainer**: M-Aboelgoud
+**Project Maintainer**: Hesham Haroon
 
-**Repository**: [https://github.com/M-Aboelgoud/Lumina](https://github.com/M-Aboelgoud/Lumina)
+**Repository**: [https://github.com/h9-tec/lumina-ai](https://github.com/h9-tec/lumina-ai)
 
-**Issues**: [GitHub Issues](https://github.com/M-Aboelgoud/Lumina/issues)
+**Issues**: [GitHub Issues](https://github.com/h9-tec/lumina-ai/issues)
 
 ---
 
