@@ -1484,8 +1484,8 @@ We welcome contributions! Please follow these guidelines:
 
 ```bash
 # Fork repository
-git clone https://github.com/your-username/Lumina.git
-cd Lumina
+git clone https://github.com/h9-tec/lumina-ai.git
+cd lumina-ai
 
 # Create branch
 git checkout -b feature/your-feature-name
