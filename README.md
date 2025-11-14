@@ -1473,14 +1473,24 @@ logging.basicConfig(level=logging.DEBUG)
 
 ### Getting Help
 
-1. Check [SETUP_GUIDE.md](SETUP_GUIDE.md) for detailed instructions
-2. Review [CLAUDE.md](CLAUDE.md) for architecture details
-3. Search existing GitHub issues
-4. Create new issue with:
-   - Full error message
-   - Python version
-   - OS details
-   - Steps to reproduce
+**Documentation:**
+- Backend setup instructions are in this README (see [Quick Start](#-quick-start) and [Installation](#installation) sections above)
+- Frontend documentation: [lumina-ui/README.md](lumina-ui/README.md)
+- API endpoints and usage: See [FastAPI Endpoints](#fastapi-endpoints) section above
+
+**Support:**
+- Search [GitHub Issues](https://github.com/h9-tec/lumina-ai/issues) for similar problems
+- Create a new issue with:
+  - Full error message
+  - Python version (`python --version`)
+  - OS details (Windows/macOS/Linux)
+  - Steps to reproduce
+  - Relevant logs from the console
+
+**Common Issues:**
+- Calendar authentication: Delete `token.pickle` and re-run `python calendar_service.py`
+- Chrome profile locked: Close all Chrome windows before running
+- Audio not recording: Check system audio permissions and sounddevice setup
 
 ---
 
