@@ -67,6 +67,75 @@ Lumina is a sophisticated meeting intelligence platform that autonomously monito
 
 ---
 
+## 🎨 Web Dashboard
+
+Lumina includes a modern, professional **Next.js 15 web dashboard** for complete visual control of the platform. Built with React 19, TypeScript, Tailwind CSS, and Shadcn UI components.
+
+### Dashboard Features
+
+- **📊 Real-time Dashboard** - Live meeting status, system stats, and recent activity
+- **🎙️ Recording Library** - Browse, play, and manage meeting recordings with built-in audio player
+- **📝 Transcript Viewer** - Search and view meeting transcripts with timestamps
+- **📄 Meeting Minutes** - AI-generated summaries with action items and markdown display
+- **📅 Meeting Manager** - Calendar integration with manual join dialog
+- **⚙️ Settings Panel** - No-code configuration for Calendar, AI Models, Email, and Recording
+- **📈 Analytics** - Meeting statistics and metrics (ready for charts)
+- **🌓 Dark/Light Mode** - Automatic theme switching with persistent preferences
+- **📱 Responsive Design** - Works perfectly on mobile, tablet, and desktop
+
+### Screenshots
+
+#### Dashboard Overview
+![Dashboard](lumina-ui/assets/dashboard.png)
+*Live meeting status, upcoming calendar events, and recent recordings at a glance*
+
+#### Recordings Manager
+![Recordings](lumina-ui/assets/recordings.png)
+*Interactive table with built-in audio player, download, and delete functionality*
+
+#### Transcript Search & Viewer
+![Transcripts](lumina-ui/assets/transcripts.png)
+*Powerful search with two-panel layout for browsing and reading transcripts*
+
+#### AI-Generated Meeting Minutes
+![Minutes](lumina-ui/assets/minutes.png)
+*Markdown-formatted minutes with action items, key decisions, and meeting metadata*
+
+#### Configuration Panel
+![Settings](lumina-ui/assets/settings.png)
+*Tabbed settings interface for Calendar, AI Models, Email (SMTP), and Recording quality*
+
+### Frontend Tech Stack
+
+- **Framework**: Next.js 15 with App Router
+- **UI Library**: React 19 with TypeScript
+- **Styling**: Tailwind CSS V4 + Shadcn UI components
+- **State Management**: React Query (server state) + Zustand (client state)
+- **API Client**: Axios with authentication interceptors
+- **Theme**: next-themes for dark/light mode
+- **Notifications**: Sonner toast system
+- **Audio**: react-audio-player for playback
+- **Markdown**: react-markdown for minutes display
+
+### Quick Start (Frontend)
+
+```bash
+# Navigate to frontend directory
+cd lumina-ui
+
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
+
+# Open http://localhost:3000
+```
+
+**📚 Full frontend documentation**: See [lumina-ui/README.md](lumina-ui/README.md) for complete setup instructions, API integration guide, and development details.
+
+---
+
 ## Architecture
 
 ### System Design
